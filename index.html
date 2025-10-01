@@ -339,7 +339,6 @@
         <button class="control-btn" onclick="toggleThemeSelector()" title="Змінити тему">🎨</button>
         <button class="control-btn" onclick="toggleDarkMode()" title="Темний режим">🌙</button>
         <button class="control-btn" onclick="toggleMusic()" title="Музика">🎵</button>
-        <button class="control-btn" onclick="toggleFavoriteMusic()" title="Улюблена музика" id="favoriteMusicBtn">🎶</button>
     </div>
 
     <div class="theme-selector" id="themeSelector">
@@ -375,11 +374,6 @@
     <audio id="backgroundMusic" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_4a456a2920.mp3" type="audio/mpeg">
     </audio>
-
-    <audio id="favoriteMusic" loop>
-        <source src="Muzyka.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
         const compliments = [
         "Твої зелені очі — мов світанок, що пробуджує серце! 🌅💚",
@@ -619,33 +613,6 @@
                 musicPlaying = true;
             }
         }
-
-        function toggleFavoriteMusic() {
-            if (favoriteMusicPlaying) {
-                favoriteMusic.pause();
-                favoriteMusicPlaying = false;
-                updateFavoriteMusicButton();
-            } else {
-                music.pause();
-                musicPlaying = false;
-                favoriteMusic.play();
-                favoriteMusicPlaying = true;
-                updateFavoriteMusicButton();
-            }
-        }
-
-        function updateFavoriteMusicButton() {
-            const btn = document.getElementById('favoriteMusicBtn');
-            if (favoriteMusicPlaying) {
-                btn.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-                btn.style.color = 'white';
-            } else {
-                btn.style.background = 'rgba(255, 255, 255, 0.9)';
-                btn.style.color = 'black';
-            }
-        }
-
-
         document.addEventListener('click', (e) => {
             const selector = document.getElementById('themeSelector');
             const themeBtn = document.querySelector('.control-btn');
@@ -656,4 +623,5 @@
     </script>
 </body>
 </html>
+
 
