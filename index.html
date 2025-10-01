@@ -13,14 +13,96 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.5s ease;
         }
+
+        body.theme-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body.theme-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        body.theme-green {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        }
+
+        body.theme-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body.dark-mode {
+            filter: brightness(0.7) contrast(1.2);
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-selector {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .theme-selector.active {
+            display: block;
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+
+        .theme-option.purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .theme-option.pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .theme-option.green { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); }
+        .theme-option.blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
 
         .container {
             background: rgba(255, 255, 255, 0.95);
@@ -30,6 +112,7 @@
             max-width: 600px;
             width: 100%;
             text-align: center;
+            position: relative;
         }
 
         h1 {
@@ -46,9 +129,11 @@
             margin: 30px 0;
             min-height: 150px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             border: 2px solid #e0e7ff;
+            position: relative;
         }
 
         .compliment-text {
@@ -63,7 +148,35 @@
             font-size: 1.2em;
         }
 
-        button {
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: grayscale(100%);
+        }
+
+        .favorite-btn.active {
+            filter: grayscale(0%);
+            transform: scale(1.2);
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button.main-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -76,13 +189,26 @@
             font-weight: 600;
         }
 
-        button:hover {
+        button.main-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
 
-        button:active {
-            transform: translateY(-1px);
+        button.secondary-btn {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        button.secondary-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
         }
 
         .emoji {
@@ -96,6 +222,96 @@
             50% { transform: translateY(-10px); }
         }
 
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .favorites-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .favorites-panel.active {
+            display: block;
+        }
+
+        .favorites-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .favorite-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .favorite-text {
+            flex: 1;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .remove-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .remove-btn:hover {
+            background: #ff5252;
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            display: none;
+            z-index: 10000;
+        }
+
+        .copy-notification.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 2em;
@@ -104,24 +320,69 @@
             .compliment-text {
                 font-size: 1.1em;
             }
+
+            .controls {
+                top: 10px;
+                right: 10px;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
-<body>
+<body class="theme-purple">
+    <div class="controls">
+        <button class="control-btn" onclick="toggleThemeSelector()" title="Змінити тему">🎨</button>
+        <button class="control-btn" onclick="toggleDarkMode()" title="Темний режим">🌙</button>
+        <button class="control-btn" onclick="toggleMusic()" title="Музика">🎵</button>
+        <button class="control-btn" onclick="toggleFavoriteMusic()" title="Улюблена музика" id="favoriteMusicBtn">🎶</button>
+    </div>
+
+    <div class="theme-selector" id="themeSelector">
+        <div class="theme-option purple" onclick="changeTheme('purple')"></div>
+        <div class="theme-option pink" onclick="changeTheme('pink')"></div>
+        <div class="theme-option green" onclick="changeTheme('green')"></div>
+        <div class="theme-option blue" onclick="changeTheme('blue')"></div>
+    </div>
+
     <div class="container">
         <div class="emoji">✨</div>
         <h1>Комплімент на сьогодні</h1>
         
         <div class="compliment-box">
-            <p class="compliment-text placeholder">Натисніть кнопку, щоб отримати комплімент!</p>
+            <button class="favorite-btn" onclick="toggleFavorite()" id="favoriteBtn">🤍</button>
+            <p class="compliment-text placeholder" id="complimentText">Натисніть кнопку, щоб отримати комплімент!</p>
         </div>
         
-        <button onclick="showCompliment()">Отримати комплімент</button>
+        <div class="button-group">
+            <button class="main-btn" onclick="showCompliment()">Отримати комплімент</button>
+            <button class="secondary-btn" onclick="copyCompliment()">📋 Копіювати</button>
+            <button class="secondary-btn" onclick="toggleFavorites()">❤️ Улюблені</button>
+        </div>
+
+        <div class="favorites-panel" id="favoritesPanel">
+            <div class="favorites-title">Улюблені комплімeнти</div>
+            <div id="favoritesList"></div>
+        </div>
     </div>
+
+    <div class="copy-notification" id="copyNotification">Скопійовано! ✅</div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_4a456a2920.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="favoriteMusic" loop>
+        <source src="muzyka.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         const compliments = [
-"Твої зелені очі — мов світанок, що пробуджує серце! 🌅💚",
+        "Твої зелені очі — мов світанок, що пробуджує серце! 🌅💚",
 "Твоя усмішка — мій найкращий мотиватор, люблю тебе за неї! 🚀😊",
 "У твоїх очах можна заблукати і знаходити тільки тепло та підтримку. 🌀💚",
 "Лізочка ти найкраща, і я щасливий, що ти моя! 🌟❤️",
@@ -222,19 +483,176 @@
 "Ти — моя натхненна майбутність; хочу будувати її тільки з тобою. 🏡✨"
         ];
 
+        let currentCompliment = "";
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let musicPlaying = false;
+        let favoriteMusicPlaying = false;
+        const music = document.getElementById('backgroundMusic');
+        const favoriteMusic = document.getElementById('favoriteMusic');
+
         function showCompliment() {
             const randomIndex = Math.floor(Math.random() * compliments.length);
-            const complimentText = document.querySelector('.compliment-text');
+            currentCompliment = compliments[randomIndex];
+            const complimentText = document.getElementById('complimentText');
             
             complimentText.classList.remove('placeholder');
             complimentText.style.opacity = '0';
             
             setTimeout(() => {
-                complimentText.textContent = compliments[randomIndex];
+                complimentText.textContent = currentCompliment;
                 complimentText.style.opacity = '1';
+                updateFavoriteButton();
+                createConfetti();
             }, 200);
         }
+
+        function createConfetti() {
+            const colors = ['❤️', '💚', '💙', '💛', '💜', '🌟', '✨', '💫'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    confetti.style.animation = `fall ${Math.random() * 2 + 2}s linear`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        function toggleFavorite() {
+            if (!currentCompliment) return;
+            
+            const index = favorites.indexOf(currentCompliment);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(currentCompliment);
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoriteButton();
+            updateFavoritesList();
+        }
+
+        function updateFavoriteButton() {
+            const btn = document.getElementById('favoriteBtn');
+            if (favorites.includes(currentCompliment)) {
+                btn.textContent = '❤️';
+                btn.classList.add('active');
+            } else {
+                btn.textContent = '🤍';
+                btn.classList.remove('active');
+            }
+        }
+
+        function toggleFavorites() {
+            const panel = document.getElementById('favoritesPanel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                updateFavoritesList();
+            }
+        }
+
+        function updateFavoritesList() {
+            const list = document.getElementById('favoritesList');
+            if (favorites.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999;">Ще немає улюблених компліментів</p>';
+                return;
+            }
+            
+            list.innerHTML = favorites.map((fav, index) => `
+                <div class="favorite-item">
+                    <span class="favorite-text">${fav}</span>
+                    <button class="remove-btn" onclick="removeFavorite(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFavorite(index) {
+            favorites.splice(index, 1);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesList();
+            updateFavoriteButton();
+        }
+
+        function copyCompliment() {
+            if (!currentCompliment) {
+                alert('Спочатку отримайте комплімент!');
+                return;
+            }
+            
+            navigator.clipboard.writeText(currentCompliment).then(() => {
+                const notification = document.getElementById('copyNotification');
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function changeTheme(theme) {
+            document.body.className = 'theme-' + theme;
+            document.getElementById('themeSelector').classList.remove('active');
+        }
+
+        function toggleThemeSelector() {
+            document.getElementById('themeSelector').classList.toggle('active');
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                music.pause();
+                musicPlaying = false;
+            } else {
+                favoriteMusic.pause();
+                favoriteMusicPlaying = false;
+                updateFavoriteMusicButton();
+                music.play();
+                musicPlaying = true;
+            }
+        }
+
+        function toggleFavoriteMusic() {
+            if (favoriteMusicPlaying) {
+                favoriteMusic.pause();
+                favoriteMusicPlaying = false;
+                updateFavoriteMusicButton();
+            } else {
+                music.pause();
+                musicPlaying = false;
+                favoriteMusic.play();
+                favoriteMusicPlaying = true;
+                updateFavoriteMusicButton();
+            }
+        }
+
+        function updateFavoriteMusicButton() {
+            const btn = document.getElementById('favoriteMusicBtn');
+            if (favoriteMusicPlaying) {
+                btn.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+                btn.style.color = 'white';
+            } else {
+                btn.style.background = 'rgba(255, 255, 255, 0.9)';
+                btn.style.color = 'black';
+            }
+        }
+
+
+        document.addEventListener('click', (e) => {
+            const selector = document.getElementById('themeSelector');
+            const themeBtn = document.querySelector('.control-btn');
+            if (!selector.contains(e.target) && e.target !== themeBtn) {
+                selector.classList.remove('active');
+            }
+        });
     </script>
 </body>
-
 </html>
